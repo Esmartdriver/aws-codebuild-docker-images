@@ -365,7 +365,34 @@ VOLUME /var/lib/docker
 #*********************** END  DOCKER  ****************************
 
 #=======================End of layer: corretto  =================
-FROM runtimes_n_corretto AS std_v6
+
+FROM runtimes_n_corretto AS runtimes_n_corretto_n_esmart
+
+#************************** AOSP *********************************
+# Install AOSP fetch dependencies
+RUN apt-get update -y \
+    && apt-get install -y git \
+    && apt-get install -y python3 \
+    && apt-get install -y libncurses5 \
+    && apt-get install -y tree \
+    && apt-get install -y snapd \
+    && apt-get install -y repo
+
+# Install AOSP build dependencies
+RUN apt-get update -y \
+    && apt-get install -y bc \
+    && apt-get install -y lzma \
+    && apt-get install -y lzop \
+    && apt-get install -y man-db \
+    && apt-get install -y bison \
+    && apt-get install -y flex \
+    && apt-get install -y libmpc-dev \
+    && apt-get install -y u-boot-tools
+#************************ END  AOSP ******************************
+
+#=======================End of layer: esmart  ====================
+
+FROM runtimes_n_corretto_n_esmart AS std_v6
 
 # Activate runtime versions specific to image version.
 RUN n $NODE_16_VERSION
